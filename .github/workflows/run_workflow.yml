@@ -1,0 +1,25 @@
+name: Run workflow.R nightly
+
+on:
+  schedule:
+    - cron: "0 5 * * *"   # 10:00 PM Pacific time (UTC-7)
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install packages
+        run: |
+          Rscript -e 'install.packages(c("tidyverse","httr","jsonlite"))'
+
+      - name: Run workflow.R
+        run: |
+          Rscript workflow.R
